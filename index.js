@@ -24,18 +24,27 @@ const client = knex({
     app.get('/', (req, res) => res.send('Hello World!'));
 
     app.get('/db', async (req, res) => {
+      /*
+      CREATE TABLE Persons (
+        PersonID int,
+        LastName varchar(255),
+        FirstName varchar(255),
+        Address varchar(255),
+        City varchar(255)
+      );
+      */
       try {
         const rows = await client.select('lastname')
-          .from('persons')
+          .from('persons');
         console.log(rows);
         res.send('success');
       } catch (err) {
         console.log(err);
-        res.status(500).send('query failed');
+        res.status(500).send('failed');
       }
     });
 
-    app.listen(PORT, () => console.log(`Example app listening at http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
   } catch (connectErr) {
     console.log(connectErr);
     process.exit(1);
