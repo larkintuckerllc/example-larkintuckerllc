@@ -24,19 +24,18 @@ const client = knex({
     app.get('/', (req, res) => res.send('Hello World!'));
 
     app.get('/db', async (req, res) => {
-      /*
-      CREATE TABLE Persons (
-        PersonID int,
-        LastName varchar(255),
-        FirstName varchar(255),
-        Address varchar(255),
-        City varchar(255)
-      );
-      */
       try {
-        const rows = await client.select('lastname')
-          .from('persons');
-        console.log(rows);
+        await client.raw('SELECT VERSION()');
+        res.send('success');
+      } catch (err) {
+        console.log(err);
+        res.status(500).send('failed');
+      }
+    });
+
+    app.get('/db-slow', async (req, res) => {
+      try {
+        await client.raw('SELECT pg_sleep(1)');
         res.send('success');
       } catch (err) {
         console.log(err);
