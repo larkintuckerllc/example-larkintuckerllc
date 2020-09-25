@@ -1,5 +1,6 @@
 require ('newrelic');
 const express = require('express');
+const enforce = require('express-sslify');
 const knex = require('knex');
 const pg = require('pg');
 
@@ -21,6 +22,7 @@ const client = knex({
 (async () => {
   try {
     const app = express();
+    app.use(enforce.HTTPS({ trustProtoHeader: true }))
 
     app.get('/', (req, res) => res.send('Hello World!'));
 
