@@ -8,7 +8,7 @@ const LOADERIO_VERIFICATION_TOKEN = process.env.LOADERIO_VERIFICATION_TOKEN;
 const PORT = process.env.PORT || 3000;
 pg.defaults.ssl = true;
 
-if (DATABASE_URL === undefined || LOADERIO_VERIFICATION_TOKEN === undefined) {
+if (DATABASE_URL === undefined) {
   console.log('missing environment variables');
   process.exit(1);
 }
@@ -43,8 +43,10 @@ const client = knex({
         res.status(500).send('failed');
       }
     });
-
-    app.get(`/${LOADERIO_VERIFICATION_TOKEN}`, (req,res) => res.send(LOADERIO_VERIFICATION_TOKEN));
+    
+    if (LOADERIO_VERIFICATION_TOKEN !== undefined) {
+      app.get(`/${LOADERIO_VERIFICATION_TOKEN}`, (req,res) => res.send(LOADERIO_VERIFICATION_TOKEN));
+    }
 
     app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
   } catch (connectErr) {
